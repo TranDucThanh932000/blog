@@ -4,6 +4,9 @@
     </v-navigation-drawer> -->
 
     <v-app-bar app color="primary lighten-1">
+      <div>
+        <v-img class="logo-web" sizes="0" src="https://cocmusic.herokuapp.com/img/logo-mountain.43026b47.png"></v-img>
+      </div>
       <v-spacer></v-spacer>
       <template v-for="menu in menuHeader">
         <MenuHeader :items="menu.children" :key="menu.id" :name="menu.name" :offsetx="false" :offsety="true"></MenuHeader>
@@ -31,6 +34,7 @@
 import Loading from "@/components/Loading";
 import ToastMessage from "@/components/ToastMessage";
 import MenuHeader from "@/components/MenuHeader.vue"
+import AppService from "@/services/app.service";
 
 export default {
   name: 'App',
@@ -39,91 +43,30 @@ export default {
     ToastMessage,
     MenuHeader
   },
+  async created(){
+    await this.getMenu()
+  },
   data() {
     return{
-      menuHeader: [
-        {
-          name: 'AAAAA',
-          id: 1,
-          children: [
-            {
-              name: 'AAAAA1',
-              id: 2,
-              children: []
-            },
-            {
-              name: 'AAAAA2',
-              id: 2,
-              children: []
-            }
-          ]
-        },
-        {
-          name: 'AAAAA',
-          id: 2,
-          children: [
-            {
-              name: 'AAAAA1',
-              id: 2,
-              children: []
-            },
-            {
-              name: 'AAAAA2',
-              id: 2,
-              children: []
-            }
-          ]
-        },
-        {
-          name: 'AAAAA3',
-          id: 3,
-          children: [
-            {
-              name: 'AAAAA31',
-              id: 2,
-              children: []
-            },
-            {
-              name: 'AAAAA32',
-              id: 10,
-              children: [
-                  {
-                    name: 'AAAAA3331',
-                    id: 11,
-                    children: []
-                  },
-                  {
-                    name: 'AAAAA3332',
-                    id: 12,
-                    children: []
-                  },
-              ]
-            }
-          ]
-        },
-        {
-          name: 'AAAAA4',
-          id: 4,
-          children: []
-        },
-        {
-          name: 'AAAAA',
-          id: 5,
-          children: [
-            {
-              name: 'AAAAA1',
-              id: 2,
-              children: []
-            },
-            {
-              name: 'AAAAA2',
-              id: 2,
-              children: []
-            }
-          ]
-        },
-      ]
+      menuHeader: []
+    }
+  },
+  methods:{
+    getMenu(){
+      return AppService.getMenu()
+      .then((res) => {
+        this.menuHeader = res.data
+      })
+      .catch((res) => {
+        this.$refs['toastMessage'].open(res.message, true)
+      })
     }
   }
 };
 </script>
+
+<style>
+.logo-web .v-image__image--cover{
+  background-size: auto !important;
+}
+</style>
