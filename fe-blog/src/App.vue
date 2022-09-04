@@ -17,7 +17,10 @@
       <v-container fluid style="height: 100%">
         <v-row>
           <v-col md="8" offset-md="1">
-            <router-view style="height: 100%"></router-view>
+            <router-view @toastMessage="toastMessage" style="height: 100%"></router-view>
+          </v-col>
+          <v-col md="2">
+            <p>123 test 123123 123 test 123123 123 test 123123 123 test 123123 </p>
           </v-col>
         </v-row>
       </v-container>
@@ -55,11 +58,19 @@ export default {
     getMenu(){
       return AppService.getMenu()
       .then((res) => {
-        this.menuHeader = res.data
+        if(res.status === 200){
+          this.menuHeader = res.data
+        }else{
+          this.menuHeader = []
+          this.toastMessage(res.data, true)
+        }
       })
       .catch((res) => {
-        this.$refs['toastMessage'].open(res.message, true)
+        this.$refs['toastMessage'].open(res.data, true)
       })
+    },
+    toastMessage(mess, flag){
+      this.$refs['toastMessage'].open(mess, flag)
     }
   }
 };

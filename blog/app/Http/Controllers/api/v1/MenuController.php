@@ -22,6 +22,9 @@ class MenuController extends Controller
             foreach($data as $dt){
                 $this->recursion($dt, $menus);
             }
+            if(count($data) == 0){
+                return response('Chưa có thể loại bài viết nào', 400);
+            }
             return response($data, 200);
         }catch(Exception $e){
             return response('Lỗi khi lấy danh sách đề mục', 400);
@@ -44,4 +47,5 @@ class MenuController extends Controller
             $this->recursion($child, $menus);
         }
     }
+
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\v1\MenuController;
+use App\Http\Controllers\api\v1\BlogController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +22,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::prefix('/menu')->group( function(){
     Route::get('/', [MenuController::class, 'getAllMenu']);
+});
+
+Route::prefix('/blog')->group( function(){
+    Route::get('/{id}', [BlogController::class, 'getBlog']);
+    Route::post('/', [BlogController::class, 'saveBlog']);
 });

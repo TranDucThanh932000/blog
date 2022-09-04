@@ -8,6 +8,33 @@ export const routes = [
         name: 'homepage',
         component: () => import('@/views/Homepage.vue')
     },
+    {
+        path: '/:id',
+        name: 'detail-blog',
+        component: () => import('@/views/DetailBlog.vue')
+    },
+    {
+        path: '/admin',
+        name: 'admin',
+        component: () => import('@/views/Dashboard.vue'),
+        children: [
+            {
+                path: 'list-blog',
+                name: 'list-blog',
+                component: () => import('@/views/ListBlog.vue') 
+            },
+            {
+                path: 'create-blog',
+                name: 'create-blog',
+                component: () => import('@/views/CreateUpdateBlog.vue')
+            },
+            {
+                path: 'update-blog',
+                name: 'update-blog',
+                component: () => import('@/views/CreateUpdateBlog.vue')
+            }
+        ]
+    }
 ]
 
 const router = new VueRouter({
