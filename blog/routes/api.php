@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\api\v1\MenuController;
 use App\Http\Controllers\api\v1\BlogController;
+use App\Http\Controllers\api\v1\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,3 +29,11 @@ Route::prefix('/blog')->group( function(){
     Route::get('/{id}', [BlogController::class, 'getBlog']);
     Route::post('/', [BlogController::class, 'saveBlog']);
 });
+
+Route::prefix('/user')->group(function(){
+    Route::get('/{id}', [UserController::class, 'getUserById']);
+    Route::post('/store', [UserController::class, 'createUser']);
+});
+
+Route::post('/login', [UserController::class, 'login']);
+Route::middleware(['auth:api'])->post('/logout', [UserController::class, 'logout']);
