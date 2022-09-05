@@ -3,7 +3,7 @@
         <ckeditor     
         v-model="editorText"
         ref="ckeditor"/>
-        <button @click="save">Save</button>
+        <button @click="save">Lưu lại</button>
   </div>
 </template>
 

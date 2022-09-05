@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\v1;
 
 use App\Http\Controllers\Controller;
+use App\Models\Adminpage_sidebar;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Menu;
@@ -48,4 +49,26 @@ class MenuController extends Controller
         }
     }
 
+    public function addMenu(Request $request){
+
+    }
+
+    public function getSidebarAdminpage(){
+        try{
+            $sidebars = Adminpage_sidebar::all();
+            $data = [];
+            foreach($sidebars as $sidebar){
+                if($sidebar['parent_id'] == 0){
+                    array_push($data, $sidebar);
+                }
+                $sidebar['children'] = [];
+            }
+            foreach($data as $dt){
+                $this->recursion($dt, $sidebars);
+            }
+            return response($data, 200);
+        }catch(Exception $e){
+            return response($e, 400);
+        }
+    }
 }

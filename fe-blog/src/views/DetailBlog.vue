@@ -66,14 +66,15 @@ export default {
       })
       .catch((res) => {
         this.mainPost = {}
-        this.$emit('toastMessage', res.response.data, true)
-        this.$router.push({name: 'homepage'})
+        this.$emit('toastMessage', res.response.data + ', trở về trang chủ', true)
+        setTimeout(()=>{
+          this.$router.push({name: 'homepage'})
+        }, 2000)
       })
     }
   },
   watch:{
     '$route.params.id'(){
-        console.log(this.$route.params.id)
         this.getMainBlog()
     }
   }

@@ -2,8 +2,8 @@
   <div style="width: 100%">
       <h1>{{ mainPost.title }}</h1>
       <v-row class="ma-0">
-        <span class="mr-5">Tác giả: <span class="text-decoration-underline" style="cursor: pointer;color:#00b9ad" @click="showProfile(mainPost.author.id)">{{ mainPost.author.name }}</span></span>
-        <span>Kiểm tra bởi: <span class="text-decoration-underline" style="cursor: pointer;color:#00b9ad" @click="showProfile(mainPost.censor.id)">{{ mainPost.censor.name }}</span></span>
+        <span class="mr-5">Tác giả: <span class="text-decoration-underline" style="cursor: pointer;color:#00b9ad" @click="showProfile(mainPost.author.id)">{{ mainPost.author ? mainPost.author.name: '' }}</span></span>
+        <span>Kiểm tra bởi: <span class="text-decoration-underline" style="cursor: pointer;color:#00b9ad" @click="showProfile(mainPost.censor.id)">{{ mainPost.censor ? mainPost.censor.name : '' }}</span></span>
       </v-row>
       <v-row class="ma-0" align="center">
         <v-btn @click="chooseStar(index)" icon v-for="index in 5" :key="index">

@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-toolbar dense dark class="font-weight-bold" color="primary lighten-1">
-      <v-toolbar-title class="text-center">Danh sách blog đã được duyệt</v-toolbar-title>
+      <v-toolbar-title class="text-center">Danh sách blog chưa được duyệt</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-data-table
@@ -60,7 +60,6 @@ export default {
         },
         { text: "Title", value: "title" },
         { text: "Tác giả", value: "author_id_name" },
-        { text: "Người kiểm duyệt", value: "censor_id_name" },
         { text: "Ngày đăng", value: "created_at" },
         { text: "Thao tác", value: "acts" },
       ],
@@ -76,14 +75,13 @@ export default {
   },
   methods: {
     getBlogWithPagination(pageChoosed) {
-      return AppService.getBlogWithPagination(pageChoosed)
+      return AppService.getListUnaccept(pageChoosed)
         .then((res) => {
           if (res.status === 200) {
             this.desserts = res.data.blogs;
             this.desserts.forEach((x, index) => {
               x.stt = (pageChoosed - 1) * 10 + index + 1;
               x.author_id_name = x.author.name + ' - ' + x.author_id
-              x.censor_id_name = x.censor ? x.censor.name + ' - ' + x.censor_id : null
             });
             this.pageCount = res.data.pageCount;
           } else {

@@ -19,7 +19,7 @@
           ></v-autocomplete>
         </v-row>
         <v-row class="ma-0">
-            <text-editor v-model="content"/>
+            <text-editor style="width: 100%" v-model="content"/>
         </v-row>
         <v-row class="ma-0" align="center" justify="center">
             <v-btn @click="save">Lưu lại</v-btn>

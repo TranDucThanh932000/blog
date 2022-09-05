@@ -18,14 +18,18 @@ class UserController extends Controller
             
             $validator = Validator::make($request->all(), [
                 'name' => 'required|string|max:50',
-                'username' => 'required|string|unique:users|min:6|max:50',
+                'username' => 'required|string|min:5|max:20',
                 'email' => 'required|email|min:9|max:50',
-                'password' => 'required|min:6|max:20'
+                'password' => 'required|min:5|max:20'
             ]);
             if($validator->fails()){
                 return response('Thông tin chưa đúng định dạng', 400);
             }else{
                 DB::beginTransaction();
+                $checkExist = User::where(['username' => $request->username])->first();
+                if($checkExist){
+                    return response('Tên tài khoản đã tồn tại', 400);
+                }
                 $user = User::create([
                     'name' => $request->name,
                     'username' => $request->username,
@@ -56,8 +60,8 @@ class UserController extends Controller
     public function login(Request $request){
         try{
             $validator = Validator::make($request->all(), [
-                'username' => 'required|string|min:6|max:50',
-                'password' => 'required|min:6|max:20'
+                'username' => 'required|string|min:5|max:20',
+                'password' => 'required|min:5|max:20'
             ]);
             if($validator->fails()){
                 return response('Thông tin chưa đúng định dạng', 400);
@@ -80,7 +84,7 @@ class UserController extends Controller
         }
     }
 
-    public function logout(Request $request){
+    public function logout(){
         //xóa token hiện tại
         $user = Auth::user()->token();
         $user->revoke();
@@ -92,5 +96,13 @@ class UserController extends Controller
         // });
 
         return response('Đăng xuất thành công', 200);
+    }
+
+    public function checkAbility(Request $request){
+        try{
+            return response(Auth::user()->checkPermissionAccess($request->ability), 200);
+        }catch(Exception $e){
+            return response('Lỗi khi kiểm tra quyền thao tác', 500);
+        }
     }
 }
