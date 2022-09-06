@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('/menu')->group( function(){
+    Route::get('/menu-child', [MenuController::class, 'getAllMenuChildren']);
     Route::get('/', [MenuController::class, 'getAllMenu']);
     Route::middleware(['auth:api', 'can:add_menu'])->post('/', [MenuController::class, 'addMenu']);
 });
@@ -38,6 +39,7 @@ Route::prefix('/blog')->group( function(){
 
 Route::prefix('/user')->group(function(){
     Route::middleware(['auth:api'])->get('/check-ability/{ability}', [UserController::class, 'checkAbility']);
+    Route::middleware(['auth:api'])->get('/current-user', [UserController::class, 'getCurrentUser']);
     Route::get('/{id}', [UserController::class, 'getUserById']);
     Route::post('/store', [UserController::class, 'createUser']);
 });

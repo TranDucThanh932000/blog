@@ -35,6 +35,7 @@ class BlogController extends Controller
             $validator = Validator::make($request->all(), [
                 'title' => 'required|min:5|max:100',
                 'content' => 'required|min:1',
+                'categories' => 'required'
             ]);
             if($validator->fails()){
                 return response('Hãy điền đầy đủ thông tin', 422);
@@ -45,12 +46,13 @@ class BlogController extends Controller
                     'date_publish' => Carbon::now(),
                     'author_id' => Auth::user()->id
                 ]);
+                $blog->blogmenus()->sync($request->categories); 
                 DB::commit();
-                return response($blog, 200);
+                return response('Tạo bài viết thành công, vui lòng chờ xét duyệt', 200);
             }
         }catch(Exception $e){
             DB::rollBack();
-            return response('Lỗi khi thêm bài viết', 500);
+            return response($e, 500);
         }
     }
 

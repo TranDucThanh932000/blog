@@ -105,4 +105,21 @@ class UserController extends Controller
             return response('Lỗi khi kiểm tra quyền thao tác', 500);
         }
     }
+
+    public function getCurrentUser(Request $request){
+        try{
+            $user = Auth::user();
+            $roles = $user->roles()->get();
+            $permissions = [];
+            foreach($roles as $role){
+                foreach($role->rolepermissions()->get() as $permiss){
+                    array_push($permissions, $permiss->key_code);
+                }
+            }
+            $user['roles'] = $permissions;
+            return response(Auth::user(), 200);
+        }catch(Exception $e){
+            return response('Lỗi khi lấy thông tin người dùng hiện tại', 500);
+        }
+    }
 }

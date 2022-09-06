@@ -5,10 +5,10 @@
         <span class="mr-5">Tác giả: <span class="text-decoration-underline" style="cursor: pointer;color:#00b9ad" @click="showProfile(mainPost.author.id)">{{ mainPost.author ? mainPost.author.name : '' }}</span></span>
       </v-row>
       <v-row class="ma-0 my-3">
-        <span>Ngày đăng: {{ mainPost.date_publish }}</span>
+        <span>Ngày đăng: {{ new Date(mainPost.created_at).toLocaleString() }}</span>
       </v-row>
       <v-row class="ma-0">
-        <div v-html="mainPost.content"></div>
+        <div v-html="mainPost.content" style="width: 100%"></div>
       </v-row>
       <v-row class="ma-0" align="center" justify="center">
         <v-btn @click="accept" color="primary" class="mr-1" v-if="!mainPost.censor_id">Duyệt bài viết</v-btn>

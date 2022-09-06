@@ -77,9 +77,9 @@
 
     <v-main>
       <v-container fluid style="height: 100%">
-        <v-row>
+        <v-row style="width: 100%">
           <v-col
-            :md="showSidebar || $route.name == 'login' ? 12 : 8"
+            :md="showSidebar || !showSidebarRight || $route.name == 'login' ? 12 : 8"
             :offset-md="showSidebar || $route.name == 'login' ? 0 : 1"
           >
             <router-view
@@ -126,16 +126,14 @@ export default {
         "admin",
         "list-blog",
         "accept-blog",
-        "create-blog",
-        "update-blog",
+        "preview"
       ],
       listNotShowSidebarRight: [
         "login",
         "admin",
         "list-blog",
         "accept-blog",
-        "create-blog",
-        "update-blog",
+        "preview"
       ],
       listNotShowMenu: [
         "login",
@@ -144,6 +142,7 @@ export default {
         "accept-blog",
         "create-blog",
         "update-blog",
+        "preview"
       ],
       listNotShowTotalMenu: ["login", "admin"],
       showSidebar: false,
@@ -212,6 +211,7 @@ export default {
         .then((res) => {
           if (res.status === 200) {
             localStorage.removeItem("myblog_token");
+            this.$store.dispatch('updateUser', null);
             this.$router.push({ name: "login" });
           } else {
             this.toastMessage("Đăng xuất thất bại", true);
@@ -222,7 +222,7 @@ export default {
         });
     },
     isLogin() {
-      if (localStorage.getItem("myblog_token")) {
+      if (this.$store.state.user) {
         return true;
       }
       return false;

@@ -35,6 +35,15 @@ const AppService = {
     },
     checkAbility(ability){
         return $http.get('/user/check-ability/' + ability)
+    },
+    getCurrentUser(){
+        return $http.get('/user/current-user')
+    },
+    getSubMenu(){
+        return $http.get('/menu/menu-child')
+    },
+    saveBlog(data){
+        return $http.post('/blog/store', data)
     }
 }
 

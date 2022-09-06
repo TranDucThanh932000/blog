@@ -15,9 +15,9 @@ export const routes = [
         component: () => import('@/views/Login.vue')
     },
     {
-        path: '/:id',
-        name: 'detail-blog',
-        component: () => import('@/views/DetailBlog.vue')
+        path: '/create-blog',
+        name: 'create-blog',
+        component: () => import('@/views/CreateUpdateBlog.vue')
     },
     {
         path: '/admin',
@@ -35,11 +35,6 @@ export const routes = [
                 component: () => import('@/views/AcceptBlog.vue') 
             },
             {
-                path: 'create-blog',
-                name: 'create-blog',
-                component: () => import('@/views/CreateUpdateBlog.vue')
-            },
-            {
                 path: 'update-blog',
                 name: 'update-blog',
                 component: () => import('@/views/CreateUpdateBlog.vue')
@@ -50,7 +45,20 @@ export const routes = [
                 component: () => import('@/views/PreviewDetailBlog.vue')
             }
         ]
-    }
+    },
+    {
+        path: '/blog/:id',
+        name: 'detail-blog',
+        component: () => import('@/views/DetailBlog.vue')
+    },
+
+]
+
+const namePathAdmin = [
+    'admin',
+    'list-blog',
+    'accept-blog',
+    'preview'
 ]
 
 const router = new VueRouter({
@@ -59,21 +67,27 @@ const router = new VueRouter({
     routes
 })
 
-
 router.beforeEach(async (to, from ,next) => {
     axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem('myblog_token')
-    // axios({
-    //     method: 'get',
-    //     baseURL: `${process.env.VUE_APP_BASE_API_URL}`,
-    //     url :'/checkAuthToken'
-    // })
-    // .then(async (res) => {
-
-    // })
-    if(localStorage.getItem('myblog_token') && to.name === 'login'){
+    if(!router.app.$store.state.user && localStorage.getItem('myblog_token')){
+        await router.app.$store.dispatch("getCurrentUser");
+    }
+    if(router.app.$store.state.user && to.name === 'login'){
         next({ name: 'homepage' })
     }else{
-        next()
+        if(router.app.$store.state.user){
+            if(router.app.$store.state.user.roles.length === 0 && namePathAdmin.includes(to.name)){
+                next({ name: 'homepage'})
+            }else{
+                next()
+            }
+        }else{
+            if(namePathAdmin.includes(to.name)){
+                next({ name: 'homepage'})
+            }else{
+                next()
+            }
+        }
     }
 })
 

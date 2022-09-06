@@ -16,4 +16,8 @@ class Blog extends Model
         return $this->belongsToMany(User::class, 'users');
     }
 
+    public function blogmenus(){
+        return $this->belongsToMany(Menu::class, 'blog_categories', 'blog_id', 'category_id');
+    }
+
 }

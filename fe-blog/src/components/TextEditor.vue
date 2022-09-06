@@ -3,7 +3,9 @@
         <ckeditor     
         v-model="editorText"
         ref="ckeditor"/>
-        <button @click="save">Lưu lại</button>
+        <v-row align="center" justify="center" class="ma-0 mt-5">
+          <v-btn @click="save" color="primary">Lưu bài viết</v-btn>
+        </v-row>
   </div>
 </template>
 
@@ -18,8 +20,8 @@ export default {
     };
   },
   methods: {
-    async save() {
-      console.log(this.editorText)
+    save() {
+      this.$emit('save', this.editorText)
     },
   },
 };

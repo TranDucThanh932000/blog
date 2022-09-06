@@ -37,16 +37,22 @@
       ></v-pagination>
     </div>
     <Loading ref="loading" />
+    <ConfirmDialog ref="confirmDialog" txtTitle="Xóa bài viết" question="Bạn đã chắc chắn muốn xóa bài viết này chưa?"/>
+    <toast-message ref="toastMessage" />
   </v-card>
 </template>
 
 <script>
 import AppService from "@/services/app.service";
 import Loading from "@/components/Loading.vue";
+import ConfirmDialog from "@/components/ConfirmDialog.vue";
+import ToastMessage from "@/components/ToastMessage";
 
 export default {
   components: {
     Loading,
+    ConfirmDialog,
+    ToastMessage
   },
   data() {
     return {
@@ -96,7 +102,24 @@ export default {
       this.$router.push('/admin/preview/' + id)
     },
     deleteItem(id){
-      console.log(id)
+      this.$refs['confirmDialog'].open(id)
+      .then((id) => {
+        AppService.cancelBlog(id)
+        .then(async (res) => {
+            if(res.status === 200){
+                this.$refs['toastMessage'].open(res.data, false)
+                this.$refs["loading"].open();
+                await this.getBlogWithPagination(this.page)
+                this.$refs["loading"].close();
+            }else{
+                this.$refs['toastMessage'].open(res.data, true)
+            }
+        })
+        .catch(res => {
+            this.$refs['toastMessage'].open(res.response.data, true)
+        })
+      })
+      .catch(() => {})
     },
     checkDeleteAbility(){
       return AppService.checkAbility('delete_blog')

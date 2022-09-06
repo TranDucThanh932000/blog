@@ -12,7 +12,7 @@
         <span class="ml-2">{{ mainPost.ratedStar }}/5 - ({{ mainPost.totalRated }} bình chọn)</span>
       </v-row>
       <v-row class="ma-0 my-3">
-        <span>Ngày đăng: {{ mainPost.date_publish }}</span>
+        <span>Ngày đăng: {{ new Date(mainPost.created_at).toLocaleString() }}</span>
       </v-row>
       <v-row class="ma-0">
         <div v-html="mainPost.content"></div>

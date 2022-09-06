@@ -10,6 +10,8 @@
           <v-autocomplete
             v-model="categories"
             :items="listCategory"
+            item-text="name"
+            item-value="id"
             outlined
             dense
             chips
@@ -19,18 +21,19 @@
           ></v-autocomplete>
         </v-row>
         <v-row class="ma-0">
-            <text-editor style="width: 100%" v-model="content"/>
+            <text-editor style="width: 100%" @save="save"/>
         </v-row>
-        <v-row class="ma-0" align="center" justify="center">
-            <v-btn @click="save">Lưu lại</v-btn>
-        </v-row>
+        <toast-message ref="toastMessage" />
     </div>
 </template>
 
 <script>
 import TextEditor from '@/components/TextEditor'
+import AppService from "@/services/app.service"
+import ToastMessage from "@/components/ToastMessage";
+
 export default {
-    components: { TextEditor },
+    components: { TextEditor, ToastMessage},
     name: 'CreateBlog',
     data() {
         return{
@@ -38,14 +41,45 @@ export default {
                 v => !!v || 'Không được để trống'
             ],
             title: null,
-            content: null,
             categories: [],
             listCategory: []
         }
     },
+    mounted(){
+        this.getSubMenu();
+    },
     methods:{
-        save(){
-            console.log(this.title, this.content)
+        save(content){
+            return AppService.saveBlog({
+                title: this.title,
+                content: content,
+                categories: this.categories
+            })
+            .then((res) => {
+                if(res.status === 200){
+                    this.$refs['toastMessage'].open(res.data, false)
+                }else{
+                    this.$refs['toastMessage'].open(res.data, true)
+                }
+            })
+            .catch(res => {
+                this.$refs['toastMessage'].open(res.response.data, true)
+            })
+        },
+        getSubMenu(){
+            return AppService.getSubMenu()
+            .then(res => {
+                if(res.status === 200){
+                    this.listCategory = res.data
+                }else{
+                    this.listCategory = []
+                    this.$refs['toastMessage'].open(res.data, true)
+                }
+            })
+            .catch(res => {
+                this.listCategory = []
+                this.$refs['toastMessage'].open(res.response.data, true)
+            })
         }
     }
 }

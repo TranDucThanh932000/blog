@@ -7,6 +7,7 @@ use App\Models\Adminpage_sidebar;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Menu;
+use Illuminate\Support\Facades\DB;
 
 class MenuController extends Controller
 {
@@ -70,5 +71,23 @@ class MenuController extends Controller
         }catch(Exception $e){
             return response($e, 400);
         }
+    }
+
+    public function getAllMenuChildren(){
+        try{
+            $parent = DB::table('menus')->select('parent_id')->distinct()->get();
+            $arrParentId = [];
+            foreach($parent as $parent_id){
+                array_push($arrParentId, $parent_id->parent_id);
+            }
+            $data = Menu::whereNotIn('id', $arrParentId)->get();
+            if(count($data) === 0){
+                return response('Không tồn tại thể loại bài viết phụ nào', 400);
+            }
+            return response($data, 200);
+        }catch(Exception $e){
+            return response('Lỗi khi lấy thể loại bài viết', 400);
+        }
+
     }
 }
