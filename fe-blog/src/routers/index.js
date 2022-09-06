@@ -15,6 +15,11 @@ export const routes = [
         component: () => import('@/views/Login.vue')
     },
     {
+        path: '/search/:txtSearch',
+        name: 'search',
+        component: () => import('@/views/SearchHomePage.vue')
+    },
+    {
         path: '/create-blog',
         name: 'create-blog',
         component: () => import('@/views/CreateUpdateBlog.vue')
@@ -76,7 +81,7 @@ router.beforeEach(async (to, from ,next) => {
         next({ name: 'homepage' })
     }else{
         if(router.app.$store.state.user){
-            if(router.app.$store.state.user.roles.length === 0 && namePathAdmin.includes(to.name)){
+            if(router.app.$store.state.user.roles.length === 3 && namePathAdmin.includes(to.name)){
                 next({ name: 'homepage'})
             }else{
                 next()

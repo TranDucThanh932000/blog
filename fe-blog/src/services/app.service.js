@@ -44,6 +44,14 @@ const AppService = {
     },
     saveBlog(data){
         return $http.post('/blog/store', data)
+    },
+    getBlogBySearch(txtSearch, page){
+        return $http.get('/blog/search', {
+            params: {
+                txtSearch,
+                page
+            }
+        })
     }
 }
 

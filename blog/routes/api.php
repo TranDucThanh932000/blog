@@ -29,6 +29,7 @@ Route::prefix('/menu')->group( function(){
 
 Route::prefix('/blog')->group( function(){
     Route::get('/list-blog', [BlogController::class, 'getBlogAcceptedByPaginate']);
+    Route::get('/search', [BlogController::class, 'getBlogBySearch']);
     Route::middleware(['auth:api', 'can:accept_blog'])->get('/list-blog-unaccept', [BlogController::class, 'getBlogUnacceptByPaginate']);
     Route::middleware(['auth:api', 'can:accept_blog'])->get('/preview/{id}', [BlogController::class, 'getBlogPreview']);
     Route::middleware(['auth:api', 'can:accept_blog'])->post('/accept', [BlogController::class, 'acceptBlog']);

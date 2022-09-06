@@ -145,4 +145,27 @@ class BlogController extends Controller
             return response('Lỗi khi hủy bài viết', 400);
         }
     }
+
+    public function getBlogBySearch(Request $request){
+        try{
+            $blogs = Blog::select([
+                'id',
+                'title',
+                'image',
+                'short_description',
+                'author_id',
+                'created_at'
+            ])->whereNotNull('censor_id')->where('title', 'LIKE', '%' . $request->txtSearch . '%')->offset($request->page * 10 - 10)->limit(10)->orderBy('created_at', 'DESC')->get();
+            $data = [];
+            foreach($blogs as $blog){
+                $blog['author'] = User::find($blog->author_id);
+            }
+            $data['blogs'] = $blogs;
+            $count = Blog::whereNotNull('censor_id')->where('title', 'LIKE', '%' . $request->txtSearch . '%')->count();
+            $data['pageCount'] = $count % 10  === 0 ? ($count / 10) : floor($count / 10) + 1;
+            return response($data, 200);
+        }catch(Exception $e){
+            return response('Lỗi khi tìm kiếm bài viết', 500);
+        }
+    }
 }

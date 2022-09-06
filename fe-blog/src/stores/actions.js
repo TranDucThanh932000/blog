@@ -8,16 +8,12 @@ export const actions = {
         .then((res) => {
             if(res.status === 200){
                 let data = {}
-                let roles = []
-                res.data.roles.forEach(element => {
-                    roles.push(element.authority)
-                });
-                data.roles = roles
+                data.roles = res.data.roles
                 data.id = res.data.id
                 data.username = res.data.username
                 data.email = res.data.email
                 data.phone = res.data.phone
-                data.name = res.data.fullName
+                data.name = res.data.name
                 data.avatar = res.data.avatar
                 commit('updateUser', data)
             }

@@ -74,7 +74,7 @@ export default {
         .then((res) => {
             if(res.status === 200){
                 this.$refs['toastMessage'].open(res.data, false)
-                this.$router.push({ name: 'list-blog'})
+                this.$router.go(-1)
             }else{
                 this.$refs['toastMessage'].open(res.data, true)
             }

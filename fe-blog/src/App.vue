@@ -29,54 +29,88 @@
     </v-navigation-drawer>
 
     <v-app-bar v-if="totalMenu" app color="primary lighten-1">
-      <div>
-        <v-img
-          class="logo-web"
-          sizes="0"
-          src="https://cocmusic.herokuapp.com/img/logo-mountain.43026b47.png"
-        ></v-img>
-      </div>
-      <v-spacer></v-spacer>
-      <div v-if="showMenu" style="display: flex">
-        <template v-for="menu in menuHeader">
-          <MenuHeader
-            :items="menu.children"
-            :key="menu.id"
-            :name="menu.name"
-            :offsetx="false"
-            :offsety="true"
-          ></MenuHeader>
-        </template>
-      </div>
-      <v-spacer></v-spacer>
-      <v-menu v-if="isLogin()" offset-y>
-        <template v-slot:activator="{ on }">
-          <v-btn v-on="on" icon color="white">
-            <v-icon>mdi-account-arrow-down</v-icon>
+      <v-row align="center">
+        <v-col sm="12" md="3" style="text-align: start;">
+          <div @click="$router.push({ name: 'homepage' })" style="cursor: pointer;">
+            <v-img
+              class="logo-web"
+              src="https://cocmusic.herokuapp.com/img/logo-mountain.43026b47.png"
+            ></v-img>
+          </div>
+        </v-col>
+        <v-col sm="12" md="6">
+          <div v-if="showMenu" style="display: flex;justify-content: center;">
+            <template v-for="menu in menuHeader">
+              <MenuHeader
+                :items="menu.children"
+                :key="menu.id"
+                :name="menu.name"
+                :offsetx="false"
+                :offsety="true"
+              ></MenuHeader>
+            </template>
+          </div>
+        </v-col>
+        <v-col sm="12" md="3" style="text-align: end;">
+          <v-menu v-if="isLogin()" offset-y>
+            <template v-slot:activator="{ on }">
+              <v-btn v-on="on" icon color="white">
+                <v-icon>mdi-account-arrow-down</v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-account-circle-outline</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>Tài khoản</v-list-item-content>
+              </v-list-item>
+              <v-list-item @click="logout">
+                <v-list-item-icon>
+                  <v-icon>mdi-logout-variant</v-icon>
+                </v-list-item-icon>
+                <v-list-item-content>Đăng xuất</v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <v-btn v-else icon color="white" @click="$router.push({ name: 'login' })">
+            <v-icon>mdi-account</v-icon>
           </v-btn>
-        </template>
-        <v-list>
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon>mdi-account-circle-outline</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>Tài khoản</v-list-item-content>
-          </v-list-item>
-          <v-list-item @click="logout">
-            <v-list-item-icon>
-              <v-icon>mdi-logout-variant</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>Đăng xuất</v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-      <v-btn v-else icon color="white" @click="$router.push({ name: 'login' })">
-        <v-icon>mdi-account</v-icon>
-      </v-btn>
+        </v-col>
+      </v-row>
     </v-app-bar>
 
     <v-main>
-      <v-container fluid style="height: 100%">
+      <v-container fluid style="height: 100%;" class="pa-0">
+        <v-row style="width: 100%" class="ma-0 pt-3" v-if="showSearchMain">
+          <v-col md="12" class="pa-0">
+            <div class="setBg">
+              <v-row justify="center">
+                <p class="mt-3" style="color: white; font-size: 26px">
+                  Chào mừng bạn đến với COC MOUNTAIN
+                </p>
+              </v-row>
+              <v-row justify="center">
+                <p style="color: white">Nơi chia sẻ mọi thứ trên đời</p>
+              </v-row>
+              <v-row justify="center">
+                <v-col md="6">
+                    <v-text-field
+                      shaped
+                      outlined
+                      v-model="txtSearch"
+                      placeholder="Bạn muốn tìm hiểu về gì?"
+                      color="white"
+                      class="text-white"
+                      append-icon="mdi-magnify"
+                      @click:append="search"
+                      @keyup.enter="search"
+                    ></v-text-field>
+                </v-col>
+              </v-row>
+            </div>
+          </v-col>
+        </v-row>
         <v-row style="width: 100%">
           <v-col
             :md="showSidebar || !showSidebarRight || $route.name == 'login' ? 12 : 8"
@@ -89,7 +123,7 @@
           </v-col>
           <v-col v-if="showSidebarRight" md="2">
             <p>
-              123 test 123123 123 test 123123 123 test 123123 123 test 123123
+              Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo Chỗ hiển thị quảng cáo
             </p>
           </v-col>
         </v-row>
@@ -144,11 +178,17 @@ export default {
         "update-blog",
         "preview"
       ],
+      listShowSearchMain: [
+        'homepage',
+        'search'
+      ],
       listNotShowTotalMenu: ["login", "admin"],
       showSidebar: false,
       showSidebarRight: true,
       showMenu: true,
       totalMenu: true,
+      showSearchMain: true,
+      txtSearch: ''
     };
   },
   methods: {
@@ -174,6 +214,20 @@ export default {
         .then((res) => {
           if (res.status === 200) {
             this.sidebar = res.data;
+            for(let i = 0;i < this.sidebar.length; i++){
+              if(this.sidebar[i].children.length > 0){
+                for(let j = 0; j < this.sidebar[i].children.length; j++){
+                  if(!this.$store.state.user.roles.includes(this.sidebar[i].children[j].name_path.replaceAll('-', '_'))){
+                    this.sidebar[i].children.splice(j, 1)
+                    j--
+                  }
+                }
+              }
+              if(this.sidebar[i].children.length === 0){
+                this.sidebar.splice(i, 1)
+                i--
+              }
+            }
           } else {
             this.sidebar = [];
             this.toastMessage(res.data, true);
@@ -205,6 +259,11 @@ export default {
       } else {
         this.totalMenu = true;
       }
+      if(this.listShowSearchMain.includes(this.$route.name)){
+        this.showSearchMain = true
+      }else{
+        this.showSearchMain = false
+      }
     },
     logout() {
       return AppService.logout()
@@ -227,6 +286,11 @@ export default {
       }
       return false;
     },
+    search(){
+      if(this.txtSearch.length > 0 && this.txtSearch.length <= 50){
+        this.$router.push({ name: 'search', params: { txtSearch: this.txtSearch }})
+      }
+    }
   },
   watch: {
     "$route.name"() {
@@ -239,5 +303,31 @@ export default {
 <style>
 .logo-web .v-image__image--cover {
   background-size: auto !important;
+  background-position: center left !important;
+  margin-left: -45px;
+}
+.setBg {
+  background-image: url("./assets/bg.jpg");
+  background-size: 100%;
+  background-color: black;
+}
+.text-white input {
+  color: white !important;
+}
+
+.text-white input::placeholder {
+  color: white !important;
+}
+
+.text-white .v-input {
+  color: white !important;
+}
+
+.text-white fieldset {
+  border-color: white;
+}
+
+.text-white .v-input__icon--append .v-icon { 
+    color: white;
 }
 </style>

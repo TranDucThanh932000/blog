@@ -9,7 +9,7 @@
         <v-btn @click="chooseStar(index)" icon v-for="index in 5" :key="index">
           <v-icon :class="'star' + index">mdi-star-outline</v-icon>
         </v-btn>
-        <span class="ml-2">{{ mainPost.ratedStar }}/5 - ({{ mainPost.totalRated }} bình chọn)</span>
+        <span class="ml-2" v-if="mainPost.totalRated">{{ mainPost.ratedStar }}/5 - ({{ mainPost.totalRated }} bình chọn)</span>
       </v-row>
       <v-row class="ma-0 my-3">
         <span>Ngày đăng: {{ new Date(mainPost.created_at).toLocaleString() }}</span>

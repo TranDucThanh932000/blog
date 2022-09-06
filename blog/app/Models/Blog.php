@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Blog extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['title', 'content', 'author_id', 'censor_id', 'date_publish'];
+    protected $fillable = ['title', 'content', 'author_id', 'censor_id', 'date_publish','image','short_description'];
     protected $softDelete = ['deleted_at'];
 
     public function users(){

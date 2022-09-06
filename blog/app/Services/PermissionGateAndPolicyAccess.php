@@ -23,4 +23,12 @@ class PermissionGateAndPolicyAccess {
         Gate::define('edit_menu', 'App\Policies\MenuPolicy@update');
         Gate::define('delete_menu', 'App\Policies\MenuPolicy@delete');
     }
+
+    public function definePermissionPolicy(){
+        Gate::define('list_permission', 'App\Policies\PermissionPolicy@view');
+        Gate::define('add_permission', 'App\Policies\PermissionPolicy@create');
+        Gate::define('edit_permission', 'App\Policies\PermissionPolicy@update');
+        Gate::define('delete_permission', 'App\Policies\PermissionPolicy@delete');
+        Gate::define('setup_permission', 'App\Policies\PermissionPolicy@setup');
+    }
 }

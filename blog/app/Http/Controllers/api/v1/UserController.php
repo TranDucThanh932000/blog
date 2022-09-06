@@ -36,6 +36,9 @@ class UserController extends Controller
                     'email' => $request->email,
                     'password' => Hash::make($request->password) 
                 ]);
+                //fixed ability User
+                $user->roles()->sync([3,4,5]);
+
                 DB::commit();
 
                 if (!Auth::attempt([
@@ -116,7 +119,7 @@ class UserController extends Controller
                     array_push($permissions, $permiss->key_code);
                 }
             }
-            $user['roles'] = $permissions;
+            $user['roles'] = array_values(array_unique($permissions));
             return response(Auth::user(), 200);
         }catch(Exception $e){
             return response('Lỗi khi lấy thông tin người dùng hiện tại', 500);

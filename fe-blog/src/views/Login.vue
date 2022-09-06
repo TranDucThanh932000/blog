@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative">
+  <div style="position: relative;">
     <div
       style="
         position: absolute;
@@ -34,10 +34,10 @@
           <v-row align="center" justify="center" class="py-5">
             <v-btn :loading="loading" @click="login" color="primary lighten-1">Đăng nhập</v-btn>
           </v-row>
-          <v-row class="ma-0">
+          <v-row class="ma-0 pb-3">
             <v-btn text @click="$router.push({ name: 'homepage' })">
               <v-icon>mdi-back</v-icon>
-              <span>Trở lại trang chủ</span>
+              <span>> Trở lại trang chủ</span>
             </v-btn>
           </v-row>
         </v-card>
