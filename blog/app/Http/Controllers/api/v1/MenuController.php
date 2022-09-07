@@ -90,4 +90,16 @@ class MenuController extends Controller
         }
 
     }
+
+    public function getMenuById(Request $request){
+        try{
+            $data = Menu::find($request->id);
+            if(!$data){
+                return response('Không tìm thấy thể loại bài viết', 400);
+            }
+            return response($data, 200);
+        }catch(Exception $e){
+            return response('Lỗi khi lấy thể loại bài viết', 400);
+        }
+    }
 }

@@ -7,7 +7,7 @@
                 <v-spacer></v-spacer>
                 <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
-            <v-btn v-on="on" v-else text @click="choosed(item.id)" color="white">
+            <v-btn v-on="on" v-else text @click="choosed(id)" color="white">
                 {{ name }}
             </v-btn>
           </template>
@@ -15,9 +15,11 @@
             <div v-for="(item, index) in items" :key='index'>
               <MenuHeader
                 v-if="item.children.length > 0"
+                @resetTxtSearch="resetTxtSearch"
                 :items="item.children"
                 :name="item.name"
                 :key="item.id"
+                :id="item.id"
                 :offsety="false"
                 :offsetx="true"
               ></MenuHeader>
@@ -33,10 +35,14 @@
 <script>
 export default {
   name: 'MenuHeader',
-  props: ['items', 'name', 'offsetx', 'offsety'],
+  props: ['items', 'name', 'offsetx', 'offsety', 'id'],
   methods:{
     choosed(id){
-      console.log(id)
+      this.$emit('resetTxtSearch')
+      this.$router.push(`/category?category=${id}`)
+    },
+    resetTxtSearch(){
+      this.$emit('resetTxtSearch')
     }
   }
 }

@@ -31,7 +31,7 @@
     <v-app-bar v-if="totalMenu" app color="primary lighten-1">
       <v-row align="center">
         <v-col sm="12" md="3" style="text-align: start;">
-          <div @click="$router.push({ name: 'homepage' })" style="cursor: pointer;">
+          <div @click="clickLogo" style="cursor: pointer;">
             <v-img
               class="logo-web"
               src="https://cocmusic.herokuapp.com/img/logo-mountain.43026b47.png"
@@ -42,9 +42,11 @@
           <div v-if="showMenu" style="display: flex;justify-content: center;">
             <template v-for="menu in menuHeader">
               <MenuHeader
+                @resetTxtSearch="resetTxtSearch"
                 :items="menu.children"
                 :key="menu.id"
                 :name="menu.name"
+                :id="menu.id"
                 :offsetx="false"
                 :offsety="true"
               ></MenuHeader>
@@ -150,7 +152,11 @@ export default {
     MenuHeader,
   },
   async created() {
-    await Promise.all([this.getMenu(), this.getSideBarAdmin()]);
+    if(localStorage.getItem('myblog_token')){
+      await Promise.all([this.getMenu(), this.getSideBarAdmin()]);
+    }else{
+      await Promise.all([this.getMenu()]);
+    }
   },
   data() {
     return {
@@ -180,7 +186,8 @@ export default {
       ],
       listShowSearchMain: [
         'homepage',
-        'search'
+        'search',
+        'search-category'
       ],
       listNotShowTotalMenu: ["login", "admin"],
       showSidebar: false,
@@ -235,7 +242,7 @@ export default {
         })
         .catch((res) => {
           this.sidebar = [];
-          this.toastMessage(res.data, true);
+          this.toastMessage(res.response, true);
         });
     },
     showComponentOfApp() {
@@ -288,15 +295,26 @@ export default {
     },
     search(){
       if(this.txtSearch.length > 0 && this.txtSearch.length <= 50){
-        this.$router.push({ name: 'search', params: { txtSearch: this.txtSearch }})
+        if(this.$route.name === 'homepage' || this.$route.name === 'search'){
+          this.$router.push({ name: 'search', params: { txtSearch: this.txtSearch }})
+        }else{
+          this.$router.push({ name: 'search-category', query: { category: this.$store.state.category.id, txtSearch: this.txtSearch }})
+        }
       }
+    },
+    resetTxtSearch(){
+      this.txtSearch = ''
+    },
+    clickLogo(){
+      this.txtSearch = ''
+      this.$router.push({ name: 'homepage' })
     }
   },
   watch: {
     "$route.name"() {
       this.showComponentOfApp();
     },
-  },
+  }
 };
 </script>
 

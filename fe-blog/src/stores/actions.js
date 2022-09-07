@@ -22,4 +22,7 @@ export const actions = {
             localStorage.removeItem('myblog_token')
         })
     },
+    updateCategory({commit}, payload) {
+        commit('updateCategory', payload)
+    },
 }

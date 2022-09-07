@@ -168,4 +168,37 @@ class BlogController extends Controller
             return response('Lỗi khi tìm kiếm bài viết', 500);
         }
     }
+
+    public function getBlogByCategorySearch(Request $request){
+        try{
+            $blogs = Blog::join('blog_categories', 'blogs.id', '=', 'blog_categories.blog_id')->select([
+                'blogs.id',
+                'title',
+                'image',
+                'short_description',
+                'author_id',
+                'blogs.created_at'
+            ])->whereNotNull('censor_id')
+            ->where('blog_categories.category_id', $request->category)
+            ->where('title', 'LIKE', '%' . $request->txtSearch . '%')
+            ->offset($request->page * 10 - 10)
+            ->limit(10)
+            ->orderBy('created_at', 'DESC')
+            ->get();
+            $data = [];
+            foreach($blogs as $blog){
+                $blog['author'] = User::find($blog->author_id);
+            }
+            $data['blogs'] = $blogs;
+            $count = Blog::join('blog_categories', 'blogs.id', '=', 'blog_categories.blog_id')
+            ->whereNotNull('censor_id')
+            ->where('blog_categories.category_id', $request->category)
+            ->where('title', 'LIKE', '%' . $request->txtSearch . '%')
+            ->count();
+            $data['pageCount'] = $count % 10  === 0 ? ($count / 10) : floor($count / 10) + 1;
+            return response($data, 200);
+        }catch(Exception $e){
+            return response('Lỗi khi tìm kiếm thông tin bài viết', 500);
+        }
+    }
 }

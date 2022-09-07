@@ -24,12 +24,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::prefix('/menu')->group( function(){
     Route::get('/menu-child', [MenuController::class, 'getAllMenuChildren']);
     Route::get('/', [MenuController::class, 'getAllMenu']);
+    Route::get('/{id}', [MenuController::class, 'getMenuById']);
     Route::middleware(['auth:api', 'can:add_menu'])->post('/', [MenuController::class, 'addMenu']);
 });
 
 Route::prefix('/blog')->group( function(){
     Route::get('/list-blog', [BlogController::class, 'getBlogAcceptedByPaginate']);
     Route::get('/search', [BlogController::class, 'getBlogBySearch']);
+    Route::get('/search-category', [BlogController::class, 'getBlogByCategorySearch']);
     Route::middleware(['auth:api', 'can:accept_blog'])->get('/list-blog-unaccept', [BlogController::class, 'getBlogUnacceptByPaginate']);
     Route::middleware(['auth:api', 'can:accept_blog'])->get('/preview/{id}', [BlogController::class, 'getBlogPreview']);
     Route::middleware(['auth:api', 'can:accept_blog'])->post('/accept', [BlogController::class, 'acceptBlog']);

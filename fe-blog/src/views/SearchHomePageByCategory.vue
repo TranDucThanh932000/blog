@@ -1,5 +1,8 @@
 <template>
   <div class="mt-5">
+    <v-row align="center" class="ma-0">
+        <p style="font-size: 26px">Thể loại: {{ $store.state.category ? $store.state.category.name : ''}}</p>
+    </v-row>
     <v-row align="center" justify="center">
       <div>
         <v-card class="mx-auto" max-width="400" elevation="8" v-if="mainPost.id" @click="$router.push({ name: 'detail-blog', params: {id: mainPost.id} })">
@@ -105,6 +108,7 @@ import ToastMessage from "@/components/ToastMessage";
 import Loading from "@/components/Loading";
 
 export default {
+  name: 'SearchHomePageByCategory',
   components: {
     ToastMessage,
     Loading,
@@ -119,12 +123,13 @@ export default {
   },
   async mounted() {
     this.$refs["loading"].open();
-    await this.getBlogBySearch(1);
+    await Promise.all([this.$store.dispatch('getCurrentUser') ,this.getMenuById(), this.getBlogBySearch(1)])
     this.$refs["loading"].close();
   },
   methods: {
     getBlogBySearch(page) {
-      return AppService.getBlogBySearch(this.$route.params.txtSearch, page)
+        this.$store.dispatch('updateUser', )
+      return AppService.getBlogByCategorySearch(this.$route.query.txtSearch, this.$route.query.category, page)
         .then((res) => {
           this.mainPost = {};
           this.remainingPost = [];
@@ -162,6 +167,21 @@ export default {
       }
       return item;
     },
+    getMenuById(){
+        return AppService.getMenuById(this.$route.query.category)
+        .then(res => {
+            if(res.status === 200){
+                this.$store.dispatch('updateCategory', res.data)
+            }else{
+                this.$emit('toastMessage', res.data)
+                this.$store.dispatch('updateCategory', null, true)
+            }
+        })
+        .catch(res => {
+            this.$emit('toastMessage', res.response.data, true)
+            this.$store.dispatch('updateCategory', null)
+        })
+    }
   },
   watch: {
     async page() {
@@ -169,12 +189,21 @@ export default {
       await this.getBlogBySearch(this.page);
       this.$refs["loading"].close();
     },
-    async '$route.params.txtSearch'(){
+    async '$route.query.txtSearch'(){
       this.$refs["loading"].open();
       this.page = 1
-      await this.getBlogBySearch(this.page);
+      await Promise.all([this.$store.dispatch('getCurrentUser'), this.getBlogBySearch(this.page)])
       this.$refs["loading"].close();
-    }
+    },
+    async '$route.query.category'(){
+      this.$refs["loading"].open();
+      this.page = 1
+      await Promise.all([ this.$store.dispatch('getCurrentUser'), this.getMenuById(), this.getBlogBySearch(this.page)]) 
+      this.$refs["loading"].close();
+    },
+  },
+  beforeDestroy() {
+    this.$store.dispatch('updateCategory', null)
   },
 };
 </script>

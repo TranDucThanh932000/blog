@@ -52,6 +52,21 @@ const AppService = {
                 page
             }
         })
+    },
+    getBlogByCategorySearch(txtSearch, category, page){
+        if(!category){
+            category = ''
+        }
+        return $http.get('/blog/search-category', {
+            params: {
+                txtSearch,
+                category,
+                page
+            }
+        })
+    },
+    getMenuById(id){
+        return $http.get('/menu/' + id)
     }
 }
 

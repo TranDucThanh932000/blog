@@ -20,6 +20,11 @@ export const routes = [
         component: () => import('@/views/SearchHomePage.vue')
     },
     {
+        path: '/category',
+        name: 'search-category',
+        component: () => import('@/views/SearchHomePageByCategory.vue')
+    },
+    {
         path: '/create-blog',
         name: 'create-blog',
         component: () => import('@/views/CreateUpdateBlog.vue')
@@ -63,7 +68,9 @@ const namePathAdmin = [
     'admin',
     'list-blog',
     'accept-blog',
-    'preview'
+    'preview',
+    'setup-permission',
+    'list-permission'
 ]
 
 const router = new VueRouter({
